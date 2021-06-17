@@ -1,5 +1,38 @@
 // Functions to query database
 const db = require('../models/queries')
+const jwt = require('jsonwebtoken')
+const dotenv = require('dotenv')
+
+
+// Get config vars
+dotenv.config()
+
+// Function to generate access token
+function generateAccessToken(username){
+    return jwt.sign(username, process.env.TOKEN_SECRET, {expiresIn: "1800s"})
+}
+
+// Function for authentication(verification of token)
+// Example:
+// GET https://example.com:3000/auth/login
+// Authorization: Bearer JWT_ACCESS_TOKEN
+function authenticateToken(req, res, next){
+    const authHeader = req.hesders['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+
+    if (token == null) return res.sendStatus(401)
+
+    jwt.verify(token,process.env.TOKEN_SECRET, (err, user) => {
+        console.log(err)
+
+        if (err){
+            return res.sendStatus(403)
+        }
+        req.user = user
+
+        next()
+    })
+}
 
 
 //main controller
@@ -34,7 +67,19 @@ const register_controller = (req, res) => {
 }
 
 
+const authenticate_controller = (req, res) => {
+    console.log("INside authenticate controller");
+    const { name } = req.body
+    console.log(name)
+    console.log(generateAccessToken({name})) 
+    res.send("from authenticate controller")
+}
+
+
+
 exports.main_controller = main_controller;
 exports.login_controller = login_controller;
 exports.logout_controller = logout_controller;
 exports.register_controller = register_controller;
+exports.authenticate_controller = authenticate_controller;
+exports.authenticateToken = authenticateToken;
