@@ -17,7 +17,7 @@ function generateAccessToken(username){
 // GET https://example.com:3000/auth/login
 // Authorization: Bearer JWT_ACCESS_TOKEN
 function authenticateToken(req, res, next){
-    const authHeader = req.hesders['authorization']
+    const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1]
 
     if (token == null) return res.sendStatus(401)
@@ -44,6 +44,7 @@ const main_controller = (req, res) => {
 //req should contain
 //username: VARCHAR
 //later adding password
+//URL: http://localhost:3000/auth/login
 const login_controller = (req, res) => {
     console.log("Inside login controller");
     res.send("Not implemented: Auth: Login controller");

@@ -36,21 +36,34 @@ app.get('/', (req, res) => {
 })
 
 
+// Functions for sockets communication, will be moved to
+// a seperate file/directory.
+
+var sockets = [];
+
+/*
 io.on('connection', (socket) => {
     console.log("a user connected")
+    // Add new connection to "sockets" array
+    sockets.push(socket);
+    // Alert user that we are connected
+    socket.emit("connection", null);
 
     // For receiving a message
     socket.on('data', function(data){
         console.log(`data received ${data}`)
+
+        io.emit("FromAPI", "Message2 from io.emit");
     })
 })
+
 
 server.listen(port, () => {
     console.log(`Listening on http:localhost:${port}`)
 })
 
-/*
+    */
 app.listen(port, () => {
     console.log(`Example app listening at http:localhost:${port}`)
 })
-*/
+
